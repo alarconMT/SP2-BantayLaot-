@@ -1,0 +1,61 @@
+# BantayLaot — Municipality Deployment
+# ─────────────────────────────────────
+# 1. Copy .env.municipality.example → .env.municipality and fill in values.
+# 2. Run:  docker compose up -d --build
+# 3. Open: http://<server-ip>
+#
+# The MONGODB_URI in .env.municipality MUST use "mongodb" as the hostname
+# (the service name below), e.g.:
+#   MONGODB_URI=mongodb://mongodb:27017/BantayLaot_104305000
+
+services:
+
+  mongodb:
+    image: mongo:6
+    restart: unless-stopped
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - bantaylaot_net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping').ok", "--quiet"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  municipality-server:
+    build:
+      context: ./municipality_server
+    restart: unless-stopped
+    env_file: .env.municipality
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - uploads_data:/app/uploads
+    networks:
+      - bantaylaot_net
+    # Port is internal-only; Nginx proxies /api/ to this service.
+    # Expose it here only if direct access is needed for debugging:
+    # ports:
+    #   - "3001:3001"
+
+  frontend:
+    build:
+      context: ./bantaylaot_frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    depends_on:
+      - municipality-server
+    networks:
+      - bantaylaot_net
+
+networks:
+  bantaylaot_net:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  uploads_data:

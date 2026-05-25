@@ -1,0 +1,51 @@
+{
+  "name": "bantaylaot-frontend",
+  "proxy": "http://localhost:3001",
+  "version": "0.2.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^6.6.2",
+    "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.5.2",
+    "bootstrap": "^5.3.0",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
+    "ol": "^7.5.2",
+    "philippine-location-json-for-geer": "^1.1.11",
+    "react": "^18.3.1",
+    "react-bootstrap": "^2.10.5",
+    "react-dom": "^18.3.1",
+    "react-google-charts": "^3.0.15",
+    "react-router-dom": "^7.13.2",
+    "react-scripts": "^5.0.1",
+    "web-vitals": "^4.2.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "sass": "^1.80.6"
+  }
+}

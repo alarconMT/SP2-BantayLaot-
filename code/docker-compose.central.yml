@@ -1,0 +1,43 @@
+# BantayLaot — Central Server (self-hosted alternative to Railway)
+# ────────────────────────────────────────────────────────────────
+# 1. Copy .env.central.example → .env.central and fill in JWT_SECRET.
+#    The MONGODB_URI line MUST be:
+#      MONGODB_URI=mongodb://mongodb-central:27017/BantayLaot_Central
+# 2. Run:  docker compose -f docker-compose.central.yml up -d --build
+# 3. Point each municipality's CENTRAL_SERVER_URL to http://<this-server-ip>:4000
+
+services:
+
+  mongodb-central:
+    image: mongo:6
+    restart: unless-stopped
+    volumes:
+      - mongodb_central_data:/data/db
+    networks:
+      - bantaylaot_central_net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping').ok", "--quiet"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  central-server:
+    build:
+      context: ./central_server
+    restart: unless-stopped
+    env_file: .env.central
+    ports:
+      - "4000:4000"
+    depends_on:
+      mongodb-central:
+        condition: service_healthy
+    networks:
+      - bantaylaot_central_net
+
+networks:
+  bantaylaot_central_net:
+    driver: bridge
+
+volumes:
+  mongodb_central_data:

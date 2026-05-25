@@ -1,0 +1,13 @@
+# environment secrets
+.env
+*.env
+.env.*
+!.env.*.example
+
+#node modules
+/bantaylaot_backend/node_modules/
+bantaylaot_backend/node_modules/
+/bantaylaot_frontend/node_modules/
+bantaylaot_frontend/node_modules/
+/node_modules/
+node_modules/
